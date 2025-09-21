@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SocialConnect</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #3b82f6;
+            --secondary: #64748b;
+            --accent: #f59e0b;
+            --background: #f8fafc;
+            --foreground: #0f172a;
+            --muted: #e2e8f0;
+            --card: #ffffff;
+            --border: #cbd5e1;
+            --success: #10b981;
+            --error: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--foreground);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background-color: var(--card);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 20px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--secondary);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--primary);
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #2563eb;
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 3fr 1fr;
+            gap: 20px;
+            margin-top: 30px;
+            padding-bottom: 50px;
+        }
+
+        .sidebar {
+            background-color: var(--card);
+            border-radius: 10px;
+            padding: 20px;
+            height: fit-content;
+        }
+
+        .user-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--muted);
+            margin-bottom: 20px;
+        }
+
+        .avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .user-name {
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+
+        .user-bio {
+            text-align: center;
+            color: var(--secondary);
+            font-size: 0.9rem;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--secondary);
+        }
+
+        .follow-suggestions {
+            margin-top: 20px;
+        }
+
+        .section-title {
+            font-weight: 600;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .suggestion {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--muted);
+        }
+
+        .suggestion:last-child {
+            border-bottom: none;
+        }
+
+        .suggestion-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .feed {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .create-post {
+            background-color: var(--card);
+            border-radius: 10px;
+            padding: 15px;
+        }
+
+        .post-input {
+            width: 100%;
+            border: 1px solid var(--muted);
+            border-radius: 6px;
+            padding: 12px;
+            margin-bottom: 10px;
+            resize: none;
+            min-height: 80px;
+        }
+
+        .post-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .post-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .post {
+            background-color: var(--card);
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .post-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .post-author-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .post-author-name {
+            font-weight: 600;
+        }
+
+        .post-time {
+            color: var(--secondary);
+            font-size: 0.8rem;
+        }
+
+        .post-content {
+            margin-bottom: 15px;
+        }
+
+        .post-stats {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-top: 1px solid var(--muted);
+            border-bottom: 1px solid var(--muted);
+            margin-bottom: 15px;
+            color: var(--secondary);
+            font-size: 0.9rem;
+        }
+
+        .post-actions-container {
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .post-action {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: var(--secondary);
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 6px;
+            transition: all 0.3s;
+        }
+
+        .post-action:hover {
+            background-color: var(--muted);
+        }
+
+        .comments {
+            margin-top: 15px;
+        }
+
+        .comment {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .comment-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .comment-content {
+            background-color: var(--muted);
+            padding: 10px;
+            border-radius: 10px;
+            flex: 1;
+        }
+
+        .comment-author {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .add-comment {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .comment-input {
+            flex: 1;
+            border: 1px solid var(--muted);
+            border-radius: 20px;
+            padding: 8px 15px;
+            font-size: 0.9rem;
+        }
+
+        .right-sidebar {
+            background-color: var(--card);
+            border-radius: 10px;
+            padding: 20px;
+            height: fit-content;
+        }
+
+        .trending-topics {
+            margin-bottom: 30px;
+        }
+
+        .topic {
+            padding: 8px 0;
+            border-bottom: 1px solid var(--muted);
+        }
+
+        .topic:last-child {
+            border-bottom: none;
+        }
+
+        .topic-name {
+            font-weight: 600;
+            margin-bottom: 3px;
+        }
+
+        .topic-count {
+            color: var(--secondary);
+            font-size: 0.8rem;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: var(--card);
+            border-radius: 10px;
+            padding: 25px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-weight: 600;
+            font-size: 1.3rem;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--secondary);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--muted);
+            border-radius: 6px;
+        }
+
+        .toggle-auth {
+            text-align: center;
+            margin-top: 15px;
+            color: var(--secondary);
+        }
+
+        .toggle-auth-btn {
+            color: var(--primary);
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--foreground);
+        }
+
+        @media (max-width: 992px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .right-sidebar {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-wrap: wrap;
+            }
+            
+            nav {
+                order: 3;
+                width: 100%;
+                margin-top: 15px;
+                display: none;
+            }
+            
+            nav.active {
+                display: block;
+            }
+            
+            nav ul {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .auth-buttons {
+                margin-left: auto;
+            }
+        }
+
+        .active {
+            color: var(--primary);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-users"></i>
+                    <span>SocialConnect</span>
+                </div>
+                
+                <button class="mobile-menu-btn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                
+                <nav id="main-nav">
+                    <ul>
+                        <li><a href="#" class="active">Home</a></li>
+                        <li><a href="#">Explore</a></li>
+                        <li><a href="#">Notifications</a></li>
+                        <li><a href="#">Messages</a></li>
+                    </ul>
+                </nav>
+                
+                <div class="auth-buttons">
+                    <button class="btn btn-primary" id="login-btn">Login</button>
+                    <button class="btn btn-outline" id="signup-btn">Sign Up</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="main-content">
+            <aside class="sidebar">
+                <div class="user-card">
+                    <img src="https://placeholder-image-service.onrender.com/image/80x80?prompt=User+profile+picture+of+a+person&id=4e259efa-d99b-4d31-9f63-c6a3e18a3d0c" alt="User profile picture" class="avatar">
+                    <div class="user-name">Emily Johnson</div>
+                    <div class="user-bio">Digital artist and nature lover. Always exploring new creative horizons.</div>
+                    <div class="stats">
+                        <div class="stat">
+                            <div class="stat-value">254</div>
+                            <div class="stat-label">Posts</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">1.2K</div>
+                            <div class="stat-label">Followers</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">487</div>
+                            <div class="stat-label">Following</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="follow-suggestions">
+                    <div class="section-title">People you may know</div>
+                    <div class="suggestion">
+                        <img src="https://placeholder-image-service.onrender.com/image/40x40?prompt=User+profile+picture+of+a+man&id=c85a4f0c-3531-48d2-8859-ce527771891b" alt="Profile picture of a man with glasses" class="suggestion-avatar">
+                        <div>
+                            <div>Michael Chen</div>
+                            <div class="stat-label">12 mutual friends</div>
+                        </div>
+                        <button class="btn btn-primary" style="margin-left: auto; padding: 5px 10px; font-size: 0.8rem;">Follow</button>
+                    </div>
+                    <div class="suggestion">
+                        <img src="https://placeholder-image-service.onrender.com/image/40x40?prompt=User+profile+picture+of+a+woman&id=0d1ff809-71d0-430e-ac82-7c4cc9d3d80d" alt="Profile picture of a woman smiling" class="suggestion-avatar">
+                        <div>
+                            <div>Sarah Williams</div>
+                            <div class="stat-label">8 mutual friends</div>
+                        </div>
+                        <button class="btn btn-primary" style="margin-left: auto; padding: 5px 10px; font-size: 0.8rem;">Follow</button>
+                    </div>
+                    <div class="suggestion">
+                        <img src="https://placeholder-image-service.onrender.com/image/40x40?prompt=User+profile+picture+of+a+person+with+hat&id=7f17d2ec-b0e4-4ba9-8e35-00afaee7f64a" alt="Profile picture of a person wearing a hat" class="suggestion-avatar">
+                        <div>
+                            <div>Alex Rodriguez</div>
+                            <div class="stat-label">5 mutual friends</div>
+                        </div>
+                        <button class="btn btn-primary" style="margin-left: auto; padding: 5px 10px; font-size: 0.8rem;">Follow</button>
+                    </div>
+                </div>
+            </aside>
+            
+            <main class="feed">
+                <div class="create-post">
+                    <textarea class="post-input" placeholder="What's on your mind?"></textarea>
+                    <div class="post-actions">
+                        <div>
+                            <button class="btn btn-outline" style="padding: 5px 10px; margin-right: 10px;">
+                                <i class="fas fa-image"></i> Photo
+                            </button>
+                            <button class="btn btn-outline" style="padding: 5px 10px;">
+                                <i class="fas fa-video"></i> Video
+                            </button>
+                        </div>
+                        <button class="post-btn">Post</button>
+                    </div>
+                </div>
+                
+                <div class="post">
+                    <div class="post-header">
+                        <img src="https://placeholder-image-service.onrender.com/image/40x40?prompt=User+profile+picture+of+a+man&id=fd764c91-a1a2-47b4-a64f-84c6d6cf8aaa" alt="Profile picture of James Wilson" class="post-author-avatar">
+                        <div>
+                            <div class="post-author-name">James Wilson</div>
+                            <div class="post-time">2 hours ago</div>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        <p>Just finished my morning hike! The view was absolutely breathtaking today. ☀️🏞️</p>
+                        <img src="https://placeholder-image-service.onrender.com/image/600x300?prompt=Scenic+mountain+view+with+sunrise&id=e48b4b4a-ce2b-46a6-83b2-bc6073cd2890" alt="Scenic mountain view with sunrise over peaks" style="width: 100%; border-radius: 8px; margin-top: 15px;">
+                    </div>
+                    <div class="post-stats">
+                        <div>124 likes</div>
+                        <div>23 comments</div>
+                    </div>
+                    <div class="post-actions-container">
+                        <div class="post-action">
+                            <i class="far fa-heart"></i>
+                            <span>Like</span>
+                        </div>
+                        <div class="post-action">
+                            <i class="far fa-comment"></i>
+                            <span>Comment</span>
+                        </div>
+                        <div class="post-action">
+                            <i class="far fa-share-square"></i>
+                            <span>Share</span>
+                        </div>
+                    </div>
+                    
+                    <div class="comments">
+                        <div class="comment">
+                            <img src="https://placeholder-image-service.onrender.com/image/32x32?prompt=User+profile+picture+of+a+woman&id=b5a3f631-77ad-4724-8c54-50b840d954ea" alt="Profile picture of Lisa Kim" class="comment-avatar">
+                            <div class="comment-content">
+                                <div class="comment-author">Lisa Kim</div>
+                                <p>Wow, that looks amazing! Which trail is this?</p>
+                            </div>
+                        </div>
+                        <div class="comment">
+                            <img src="https://placeholder-image-service.onrender.com/image/32x32?prompt=User+profile+picture+of+a+man&id=fd764c91-a1a2-47b4-a64f-84c6d6cf8aaa" alt="Profile picture of James Wilson" class="comment-avatar">
+                            <div class="comment-content">
+                                <div class="comment-author">James Wilson</div>
+                                <p>It's the Eagle Rock trail. Definitely recommend going early to catch the sunrise!</p>
+                            </div>
+                        </div>
+                        
+                        <div class="add-comment">
+                            <img src="https://placeholder-image-service.onrender.com/image/32x32?prompt=User+profile+picture+of+a+person&id=4e259efa-d99b-4d31-9f63-c6a3e18a3d0c" alt="Your profile picture" class="comment-avatar">
+                            <input type="text" class="comment-input" placeholder="Write a comment...">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="post">
+                    <div class="post-header">
+                        <img src="https://placeholder-image-service.onrender.com/image/40x40?prompt=User+profile+picture+of+a+woman&id=0d1ff809-71d0-430e-ac82-7c4cc9d3d80d" alt="Profile picture of Sarah Williams" class="post-author-avatar">
+                        <div>
+                            <div class="post-author-name">Sarah Williams</div>
+                            <div class="post-time">5 hours ago</div>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        <p>Just launched my new online course on digital marketing strategies! 🚀 So excited to share what I've learned over the past decade.</p>
+                        <p>Use code SOCIAL20 for 20% off if you're one of the first 50 sign-ups!</p>
+                    </div>
+                    <div class="post-stats">
+                        <div>87 likes</div>
+                        <div>15 comments</div>
+                    </div>
+                    <div class="post-actions-container">
+                        <div class="post-action">
+                            <i class="far fa-heart"></i>
+                            <span>Like</span>
+                        </div>
+                        <div class="post-action">
+                            <i class="far fa-comment"></i>
+                            <span>Comment</span>
+                        </div>
+                        <div class="post-action">
+                            <i class="far fa-share-square"></i>
+                            <span>Share</span>
+                        </div>
+                    </div>
+                    
+                    <div class="comments">
+                        <div class="comment">
+                            <img src="https://placeholder-image-service.onrender.com/image/32x32?prompt=User+profile+picture+of+a+man&id=c85a4f0c-3531-48d2-8859-ce527771891b" alt="Profile picture of Michael Chen" class="comment-avatar">
+                            <div class="comment-content">
+                                <div class="comment-author">Michael Chen</div>
+                                <p>Congratulations, Sarah! I've been waiting for this. Just signed up!</p>
+                            </div>
+                        </div>
+                        
+                        <div class="add-comment">
+                            <img src="https://placeholder-image-service.onrender.com/image/32x32?prompt=User+profile+picture+of+a+person&id=4e259efa-d99b-4d31-9f63-c6a3e18a3d0c" alt="Your profile picture" class="comment-avatar">
+                            <input type="text" class="comment-input" placeholder="Write a comment...">
+                        </div>
+                    </div>
+                </div>
+            </main>
+            
+            <aside class="right-sidebar">
+                <div class="trending-topics">
+                    <div class="section-title">Trending Topics</div>
+                    <div class="topic">
+                        <div class="topic-name">#WebDevelopment</div>
+                        <div class="topic-count">5.2K posts</div>
+                    </div>
+                    <div class="topic">
+                        <div class="topic-name">#Photography</div>
+                        <div class="topic-count">3.8K posts</div>
+                    </div>
+                    <div class="topic">
+                        <div class="topic-name">#HealthyLiving</div>
+                        <div class="topic-count">2.9K posts</div>
+                    </div>
+                    <div class="topic">
+                        <div class="topic-name">#TechNews</div>
+                        <div class="topic-count">2.4K posts</div>
+                    </div>
+                    <div class="topic">
+                        <div class="topic-name">#TravelDiaries</div>
+                        <div class="topic-count">1.7K posts</div>
+                    </div>
+                </div>
+                
+                <div class="trending-topics">
+                    <div class="section-title">Recent Activities</div>
+                    <div class="topic">
+                        <div class="topic-name">Michael liked your post</div>
+                        <div class="topic-count">10 minutes ago</div>
+                    </div>
+                    <div class="topic">
+                        <div class="topic-name">Sarah commented on your photo</div>
+                        <div class="topic-count">45 minutes ago</div>
+                    </div>
+                    <div class="topic">
+                        <div class="topic-name">James started following you</div>
+                        <div class="topic-count">2 hours ago</div>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div class="modal" id="login-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Login to SocialConnect</div>
+                <button class="close-btn">&times;</button>
+            </div>
+            <form id="login-form">
+                <div class="form-group">
+                    <label class="form-label" for="login-email">Email</label>
+                    <input type="email" id="login-email" class="form-input" placeholder="Your email" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="login-password">Password</label>
+                    <input type="password" id="login-password" class="form-input" placeholder="Your password" required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Login</button>
+            </form>
+            <div class="toggle-auth">
+                Don't have an account? <span class="toggle-auth-btn" id="show-signup">Sign Up</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Signup Modal -->
+    <div class="modal" id="signup-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Create an Account</div>
+                <button class="close-btn">&times;</button>
+            </div>
+            <form id="signup-form">
+                <div class="form-group">
+                    <label class="form-label" for="signup-name">Full Name</label>
+                    <input type="text" id="signup-name" class="form-input" placeholder="Your full name" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="signup-email">Email</label>
+                    <input type="email" id="signup-email" class="form-input" placeholder="Your email" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="signup-password">Password</label>
+                    <input type="password" id="signup-password" class="form-input" placeholder="Create a password" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="signup-bio">Short Bio</label>
+                    <input type="text" id="signup-bio" class="form-input" placeholder="Tell us about yourself">
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Create Account</button>
+            </form>
+            <div class="toggle-auth">
+                Already have an account? <span class="toggle-auth-btn" id="show-login">Login</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const loginBtn = document.getElementById('login-btn');
+        const signupBtn = document.getElementById('signup-btn');
+        const loginModal = document.getElementById('login-modal');
+        const signupModal = document.getElementById('signup-modal');
+        const showSignupBtn = document.getElementById('show-signup');
+        const showLoginBtn = document.getElementById('show-login');
+        const closeBtns = document.querySelectorAll('.close-btn');
+        const loginForm = document.getElementById('login-form');
+        const signupForm = document.getElementById('signup-form');
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const mainNav = document.getElementById('main-nav');
+        
+        // Initialize data
+        const initializeData = () => {
+            if (!localStorage.getItem('users')) {
+                const users = [
+                    {
+                        id: 1,
+                        name: "Emily Johnson",
+                        email: "emily@example.com",
+                        password: "password123",
+                        bio: "Digital artist and nature lover. Always exploring new creative horizons.",
+                        avatar: "https://placeholder-image-service.onrender.com/image/80x80?prompt=User+profile+picture+of+a+person&id=4e259efa-d99b-4d31-9f63-c6a3e18a3d0c",
+                        followers: 1200,
+                        following: 487,
+                        posts: 254
+                    }
+                ];
+                localStorage.setItem('users', JSON.stringify(users));
+            }
+            
+            if (!localStorage.getItem('currentUser')) {
+                localStorage.setItem('currentUser', JSON.stringify({}));
+            }
+            
+            if (!localStorage.getItem('posts')) {
+                const posts = [
+                    {
+                        id: 1,
+                        authorId: 2,
+                        authorName: "James Wilson",
+                        authorAvatar: "https://placeholder-image-service.onrender.com/image/40x40?prompt=User+profile+picture+of+a+man&id=fd764c91-a1a2-47b4-a64f-84c6d6cf8aaa",
+                        content: "Just finished my morning hike! The view was absolutely breathtaking today. ☀️🏞️",
+                        image: "https://placeholder-image-service.onrender.com/image/600x300?prompt=Scenic+mountain+view+with+sunrise&id=e48b4b4a-ce2b-46a6-83b2-bc6073cd2890",
+                        timestamp: "2 hours ago",
+                        likes: 124,
+                        comments: [
+                            {
+                                author: "Lisa Kim",
+                                avatar: "https://placeholder-image-service.onrender.com/image/32x32?prompt=User+profile+picture+of+a+woman&id=b5a3f631-77ad-4724-8c54-50b840d954ea",
+                                content: "Wow, that looks amazing! Which trail is this?"
+                            },
+                            {
+                                author: "James Wilson",
+                                avatar: "https://placeholder-image-service.onrender.com/image/32x32?prompt=User+profile+picture+of+a+man&id=fd764c91-a1a2-47b4-a64f-84c6d6cf8aaa",
+                                content: "It's the Eagle Rock trail. Definitely recommend going early to catch the sunrise!"
+                            }
+                        ]
+                    },
+                    {
+                        id: 2,
+                        authorId: 3,
+                        authorName: "Sarah Williams",
+                        authorAvatar: "https://placeholder-image-service.onrender.com/image/40x40?prompt=User+profile+picture+of+a+woman&id=0d1ff809-71d0-430e-ac82-7c4cc9d3d80d",
+                        content: "Just launched my new online course on digital marketing strategies! 🚀 So excited to share what I've learned over the past decade.\n\nUse code SOCIAL20 for 20% off if you're one of the first 50 sign-ups!",
+                        timestamp: "5 hours ago",
+                        likes: 87,
+                        comments: [
+                            {
+                                author: "Michael Chen",
+                                avatar: "https://placeholder-image-service.onrender.com/image/32x32?prompt=User+profile+picture+of+a+man&id=c85a4f0c-3531-48d2-8859-ce527771891b",
+                                content: "Congratulations, Sarah! I've been waiting for this. Just signed up!"
+                            }
+                        ]
+                    }
+                ];
+                localStorage.setItem('posts', JSON.stringify(posts));
+            }
+        };
+        
+        // Show modal function
+        const showModal = (modal) => {
+            modal.style.display = 'flex';
+        };
+        
+        // Hide modal function
+        const hideModal = (modal) => {
+            modal.style.display = 'none';
+        };
+        
+        // Toggle mobile menu
+        const toggleMobileMenu = () => {
+            mainNav.classList.toggle('active');
+        };
+        
+        // Event Listeners
+        loginBtn.addEventListener('click', () => showModal(loginModal));
+        signupBtn.addEventListener('click', () => showModal(signupModal));
+        
+        showSignupBtn.addEventListener('click', () => {
+            hideModal(loginModal);
+            showModal(signupModal);
+        });
+        
+        showLoginBtn.addEventListener('click', () => {
+            hideModal(signupModal);
+            showModal(loginModal);
+        });
+        
+        closeBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                hideModal(loginModal);
+                hideModal(signupModal);
+            });
+        });
+        
+        window.addEventListener('click', (e) => {
+            if (e.target === loginModal) hideModal(loginModal);
+            if (e.target === signupModal) hideModal(signupModal);
+        });
+        
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            
+            // Simulate login process
+            const users = JSON.parse(localStorage.getItem('users'));
+            const user = users.find(u => u.email === email && u.password === password);
+            
+            if (user) {
+                localStorage.setItem('currentUser', JSON.stringify(user));
+                alert('Login successful!');
+                hideModal(loginModal);
+                // Update UI to show logged in state
+                document.querySelector('.auth-buttons').innerHTML = `
+                    <button class="btn btn-outline" id="logout-btn">Logout</button>
+                `;
+                document.getElementById('logout-btn').addEventListener('click', () => {
+                    localStorage.setItem('currentUser', JSON.stringify({}));
+                    document.querySelector('.auth-buttons').innerHTML = `
+                        <button class="btn btn-primary" id="login-btn">Login</button>
+                        <button class="btn btn-outline" id="signup-btn">Sign Up</button>
+                    `;
+                    // Re-attach event listeners to the new buttons
+                    document.getElementById('login-btn').addEventListener('click', () => showModal(loginModal));
+                    document.getElementById('signup-btn').addEventListener('click', () => showModal(signupModal));
+                });
+            } else {
+                alert('Invalid email or password');
+            }
+        });
+        
+        signupForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('signup-name').value;
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+            const bio = document.getElementById('signup-bio').value;
+            
+            // Simulate signup process
+            const users = JSON.parse(localStorage.getItem('users'));
+            const newUser = {
+                id: users.length + 1,
+                name,
+                email,
+                password,
+                bio,
+                avatar: "https://placeholder-image-service.onrender.com/image/80x80?prompt=User+profile+picture&id=" + Math.random().toString(36).substr(2, 9),
+                followers: 0,
+                following: 0,
+                posts: 0
+            };
+            
+            users.push(newUser);
+            localStorage.setItem('users', JSON.stringify(users));
+            localStorage.setItem('currentUser', JSON.stringify(newUser));
+            
+            alert('Account created successfully!');
+            hideModal(signupModal);
+            
+            // Update UI to show logged in state
+            document.querySelector('.auth-buttons').innerHTML = `
+                <button class="btn btn-outline" id="logout-btn">Logout</button>
+            `;
+            document.getElementById('logout-btn').addEventListener('click', () => {
+                localStorage.setItem('currentUser', JSON.stringify({}));
+                document.querySelector('.auth-buttons').innerHTML = `
+                    <button class="btn btn-primary" id="login-btn">Login</button>
+                    <button class="btn btn-outline" id="signup-btn">Sign Up</button>
+                `;
+                // Re-attach event listeners to the new buttons
+                document.getElementById('login-btn').addEventListener('click', () => showModal(loginModal));
+                document.getElementById('signup-btn').addEventListener('click', () => showModal(signupModal));
+            });
+        });
+        
+        mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+        
+        // Like post functionality
+        document.querySelectorAll('.post-action').forEach(action => {
+            if (action.querySelector('.fa-heart')) {
+                action.addEventListener('click', function() {
+                    const icon = this.querySelector('i');
+                    if (icon.classList.contains('far')) {
+                        icon.classList.remove('far');
+                        icon.classList.add('fas');
+                        icon.style.color = 'var(--error)';
+                    } else {
+                        icon.classList.remove('fas');
+                        icon.classList.add('far');
+                        icon.style.color = '';
+                    }
+                });
+            }
+        });
+        
+        // Initialize the app
+        initializeData();
+    </script>
+</body>
+</html>
